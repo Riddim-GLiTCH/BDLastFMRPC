@@ -6,6 +6,8 @@ Keep in mind that you can't click your own rich presence buttons. Other people c
 
 ### NOTE: 
 This is a fork of [dimdenGD's LastFM Rich Precence Plugin](https://github.com/dimdenGD/LastFMRichPresence), It changes the code slightly so that it displays the song artist and title in your status line, as seen here.
+
+
 ![Screenshot](https://i.imgur.com/tQaSy7x.png)
 
 ![Screenshot 2](https://i.imgur.com/VTrQyqH.png)
