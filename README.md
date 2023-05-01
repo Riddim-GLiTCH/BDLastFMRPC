@@ -4,7 +4,11 @@ Keep in mind that you can't click your own rich presence buttons. Other people c
 
 **Install https://betterdiscord.app/plugin/ZeresPluginLibrary before this plugin**
 
-![Screenshot](https://lune.dimden.dev/129c4eba56.png)  
+### NOTE: 
+This is a fork of [dimdenGD's LastFM Rich Precence Plugin](https://github.com/dimdenGD/LastFMRichPresence), It changes the code slightly so that it displays the song artist and title in your status line, as seen here.
+![Screenshot](https://i.imgur.com/tQaSy7x.png)
+
+![Screenshot 2](https://i.imgur.com/VTrQyqH.png)
 
 ## Features
 * Show what music you're listening with Last.fm. With [Webscrobbler](https://chrome.google.com/webstore/detail/web-scrobbler/hhinaapppaileiechjoiifaancjggfjm?hl=en) you can show music from 280+ different websites (see list [here](https://web-scrobbler.com/)).  
@@ -14,7 +18,7 @@ Keep in mind that you can't click your own rich presence buttons. Other people c
 * Easy setup. You can show scrobbles of any person.  
 
 ## Installation
-* Download [this](https://raw.githubusercontent.com/dimdenGD/LastFMRichPresence/main/LastFMRichPresence.plugin.js) file and put it in BetterDiscord plugin folder.  
+* Download [this](https://raw.githubusercontent.com/Riddim-GLiTCH/BDLastFMRPC/main/LastFMRichPresence.plugin.js) file and put it in BetterDiscord plugin folder.  
 * Go to [Last.fm API](https://www.last.fm/api) and create API key (it only takes few minutes, write anything about app, dont need to provide callback or website).  
 * Put Last.fm key and your Last.fm username in plugin settings.  
 * Wait a minute and it should start working  
@@ -33,7 +37,7 @@ You can get OAuth key by having Soundcloud app (but they stopped giving access) 
 This plugin uses RPC, which is official API used by lot of programs. It doesn't update your status and won't count as selfbotting.  
 
 ## Support
-Join my [Discord server](https://discord.gg/TBAM6T7AYc) for support.  
+Join [dimdenGD's Discord server](https://discord.gg/TBAM6T7AYc) for support.  
 
 ## License
 MIT
