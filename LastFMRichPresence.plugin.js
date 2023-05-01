@@ -3,10 +3,10 @@
  * @version 1.0.5
  * @description Last.fm rich presence to show what you're listening to. Finally not just Spotify!
  * @website https://discord.gg/TBAM6T7AYc
- * @author dimden#9999 (dimden.dev), dzshn#1312 (dzshn.xyz)
+ * @author dimden#9999 (dimden.dev), dzshn#1312 (dzshn.xyz), N14
  * @authorLink https://dimden.dev/
- * @updateUrl https://raw.githubusercontent.com/dimdenGD/LastFMRichPresence/main/LastFMRichPresence.plugin.js
- * @source https://github.com/dimdenGD/LastFMRichPresence/blob/main/LastFMRichPresence.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/Riddim-GLiTCH/BDLastFMRPC/main/LastFMRichPresence.plugin.js
+ * @source https://github.com/Riddim-GLiTCH/BDLastFMRPC/blob/main/LastFMRichPresence.plugin.js
  * @invite TBAM6T7AYc
  * @donate https://dimden.dev/donate/
  * @patreon https://www.patreon.com/dimdendev/
@@ -118,13 +118,13 @@ class LastFMRichPresence {
         return "LastFMRichPresence";
     }
     getDescription() {
-        return "Last.fm presence to show what you're listening to. Finally not just Spotify!";
+        return "Last.fm presence to show what you're listening to. Finally not just Spotify! - This is a fork made by N14.";
     }
     getVersion() {
-        return "1.0.4";
+        return "1.0.4-N14";
     }
     getAuthor() {
-        return "dimden#9999 (dimden.dev), dzshn#1312 (dzshn.xyz)";
+        return "dimden#9999 (dimden.dev), dzshn#1312 (dzshn.xyz), N14";
     }
     async start() {
         this.initialize();
@@ -356,7 +356,7 @@ Please visit <a href="https://github.com/dimdenGD/LastFMRichPresence" target="_b
         if(this.settings.disableWhenSpotify) {
             const activities = this.getLocalPresence().activities;
             if(activities.find(a => a.name === "Spotify")) {
-                if(activities.find(a => a.name === "some music")) {
+                if(activities.find(a => a.name === `${this.trackData?.artist?.['#text']} - ${this.trackData.name}`)) {
                     this.setActivity({});
                 }
                 return;
@@ -377,7 +377,7 @@ Please visit <a href="https://github.com/dimdenGD/LastFMRichPresence" target="_b
         }
         let obj = {
             application_id: ClientID,
-            name: "some music",
+            name: `${this.trackData?.artist?.['#text']} - ${this.trackData.name}`,
             details: this.trackData.name,
             state: this.trackData?.album?.['#text'] ? `${this.trackData?.artist?.['#text']} - ${this.trackData?.album?.['#text']}` : this.trackData?.artist?.['#text'],
             timestamps: { start: this.startPlaying ? Math.floor(this.startPlaying / 1000) : Math.floor(Date.now() / 1000) },
