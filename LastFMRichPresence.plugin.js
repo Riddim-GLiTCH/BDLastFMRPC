@@ -3,7 +3,7 @@
  * @version 1.0.5
  * @description Last.fm rich presence to show what you're listening to. Finally not just Spotify!
  * @website https://discord.gg/TBAM6T7AYc
- * @author dimden#9999 (dimden.dev), dzshn#1312 (dzshn.xyz), N14
+ * @author dimden#9999 (dimden.dev), dzshn#1312 (dzshn.xyz), Riddim_GLiTCH
  * @authorLink https://dimden.dev/
  * @updateUrl https://raw.githubusercontent.com/Riddim-GLiTCH/BDLastFMRPC/main/LastFMRichPresence.plugin.js
  * @source https://github.com/Riddim-GLiTCH/BDLastFMRPC/blob/main/LastFMRichPresence.plugin.js
