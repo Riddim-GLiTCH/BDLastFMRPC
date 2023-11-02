@@ -1,11 +1,12 @@
 /**
  * @name LastFMRichPresence
- * @version RDG-1.0.5
- * @description Last.fm rich presence to show what you're listening to. Finally not just Spotify!
+ * @version 1.0.7
+ * @description Last.fm rich presence to show what you're listening to. Finally not just Spotify! - Tweaked by Riddim Glitch.
  * @website https://discord.gg/TBAM6T7AYc
- * @author dimden#9999 (dimden.dev), dzshn#1312 (dzshn.xyz), Riddim_GLiTCH
+ * @author dimden#9999 (dimden.dev), dzshn#1312 (dzshn.xyz), Riddim_GLiTCH (riddim-glitch.github.io)
  * @authorLink https://dimden.dev/
- * @source https://github.com/Riddim-GLiTCH/BDLastFMRPC/blob/main/LastFMRichPresence.plugin.js
+ * @updateUrl https://raw.githubusercontent.com/Riddim-GLiTCH/BDLastFMRPC/blob/main/LastFMRichPresence.plugin.js
+ * @source https://github.com/dimdenGD/LastFMRichPresence/blob/main/LastFMRichPresence.plugin.js
  * @invite TBAM6T7AYc
  * @donate https://dimden.dev/donate/
  * @patreon https://www.patreon.com/dimdendev/
@@ -80,6 +81,17 @@ SOFTWARE.
 
 const ClientID = "1052565934088405062";
 
+const defaultSettings = {
+	disableWhenSpotify: true,
+	listeningTo: false,
+	artistActivityName: false,
+	lastfmButton: true,
+	youtubeButton: true,
+	assetIcon: true,
+	artistBeforeAlbum: true,
+	disableWhenActivity: false
+};
+
 function isURL(url) {
     try {
         new URL(url);
@@ -104,7 +116,7 @@ class LastFMRichPresence {
         let getAsset;
         for (const key in assetManager) {
             const member = assetManager[key];
-            if (member.toString().includes("apply(")) {
+            if (member.toString().includes("APPLICATION_ASSETS_FETCH")) {
                 getAsset = member;
                 break;
             }
@@ -117,13 +129,13 @@ class LastFMRichPresence {
         return "LastFMRichPresence";
     }
     getDescription() {
-        return "Last.fm presence to show what you're listening to. Finally not just Spotify! - This is a fork made by N14.";
+        return "Last.fm presence to show what you're listening to. Finally not just Spotify!";
     }
     getVersion() {
-        return "RDG-1.0.5";
+        return "1.0.6";
     }
     getAuthor() {
-        return "dimden#9999 (dimden.dev), dzshn#1312 (dzshn.xyz), Riddim_GLiTCH";
+        return "dimden#9999 (dimden.dev), dzshn#1312 (dzshn.xyz)";
     }
     async start() {
         this.initialize();
@@ -133,6 +145,12 @@ class LastFMRichPresence {
         BdApi.showToast("LastFMRichPresence has started!");
         this.updateDataInterval = setInterval(() => this.updateData(), 20000); // i hope 20 seconds is enough
         this.settings = BdApi.loadData("LastFMRichPresence", "settings") || {};
+	for (const setting of Object.keys(defaultSettings)) {
+		if (typeof this.settings[setting] === "undefined") {
+			this.settings[setting] = defaultSettings[setting];
+		}
+		this.updateSettings();
+	}
         this.getLocalPresence = BdApi.findModuleByProps("getLocalPresence").getLocalPresence;
         this.rpc = BdApi.findModuleByProps("dispatch", "_subscriptions");
         this.rpcClientInfo = {};
@@ -167,6 +185,18 @@ class LastFMRichPresence {
         if(this.settings.disableWhenSpotify) {
             const activities = this.getLocalPresence().activities;
             if(activities.find(a => a.name === "Spotify")) {
+                if(activities.find(a => a.application_id === ClientID)) {
+                    this.setActivity({});
+                }
+                return;
+            }
+        }
+		if(this.settings.disableWhenActivity) {
+            const activities = this.getLocalPresence().activities;
+            if(activities.filter(a => a.application_id !== ClientID).length) {
+                if(activities.find(a => a.application_id === ClientID)) {
+					this.setActivity({});
+                }
                 return;
             }
         }
@@ -283,6 +313,14 @@ Useful when you want Last.fm to show when you listen to other sources but not Sp
     <option value="true">ON</option>
 </select>
 <br><br>
+<b>Disable RPC when any other activity is detected</b><br>
+<span>Disables Rich Presence when any other activity is detected.<br>
+Useful when you only want to show your Last.fm status when you're not playing games.</span><br><br>
+<select class="disablewhenactivity inputDefault-Ciwd-S input-3O04eu" style="width:80%">
+    <option value="false">OFF</option>
+    <option value="true">ON</option>
+</select>
+<br><br>
 <b>Use "Listening to" instead of "Playing"</b><br>
 <span>Will show "Listening to" text in your activity, you're not really supposed to do this so it's disabled by default.</span><br><br>
 <select class="listeningto inputDefault-Ciwd-S input-3O04eu" style="width:80%">
@@ -294,17 +332,64 @@ Useful when you want Last.fm to show when you listen to other sources but not Sp
 Show 'Listen on Soundcloud' button in the RP when listening from Soundcloud.<br>
 Please visit <a href="https://github.com/dimdenGD/LastFMRichPresence" target="_blank">homepage</a> for info about getting this field.<br><br>
 <input class="soundcloudkey inputDefault-Ciwd-S input-3O04eu" placeholder="Soundcloud Authorization key" style="width:80%">
+<br><br>
+<b>Use artist name as activity name</b><br>
+<span>Displays artist name instead of the default "some music" activity name (e.g. "listening to Pink Floyd").</span><br><br>
+<select class="artistactivityname inputDefault-Ciwd-S input-3O04eu" style="width:80%">
+    <option value="false">OFF</option>
+    <option value="true">ON</option>
+</select>
+<br><br>
+<b>Add Last.fm button</b><br>
+<span>Adds button linking to the song's page on Last.fm.</span><br><br>
+<select class="lastfmbutton inputDefault-Ciwd-S input-3O04eu" style="width:80%">
+    <option value="false">OFF</option>
+    <option value="true">ON</option>
+</select>
+<br><br>
+<b>Add Youtube button</b><br>
+<span>Adds button linking to the song on YouTube.</span><br><br>
+<select class="ytbutton inputDefault-Ciwd-S input-3O04eu" style="width:80%">
+    <option value="false">OFF</option>
+    <option value="true">ON</option>
+</select>
+<br><br>
+<b>Show asset on cover art</b><br>
+<span>Shows asset (small icon) on cover art.</span><br><br>
+<select class="asseticon inputDefault-Ciwd-S input-3O04eu" style="width:80%">
+    <option value="false">OFF</option>
+    <option value="true">ON</option>
+</select>
+<br><br>
+<b>Display artist name before album name</b><br>
+<span>Shows artist name before the album name (e.g. Pink Floyd - Dark Side of the Moon).</span><br><br>
+<select class="artistbeforealbum inputDefault-Ciwd-S input-3O04eu" style="width:80%">
+    <option value="false">OFF</option>
+    <option value="true">ON</option>
+</select>
 </div>`;
         let keyEl = template.content.firstElementChild.getElementsByClassName('lastfmkey')[0];
         let nicknameEl = template.content.firstElementChild.getElementsByClassName('lastfmnickname')[0];
         let dwsEl = template.content.firstElementChild.getElementsByClassName('disablewhenspotify')[0];
         let listeningEl = template.content.firstElementChild.getElementsByClassName('listeningto')[0];
         let soundcloudEl = template.content.firstElementChild.getElementsByClassName('soundcloudkey')[0];
+		let artistEl = template.content.firstElementChild.getElementsByClassName('artistactivityname')[0];
+		let lastbtnEl = template.content.firstElementChild.getElementsByClassName('lastfmbutton')[0];
+		let ytbtnEl = template.content.firstElementChild.getElementsByClassName('ytbutton')[0];
+		let assetEl = template.content.firstElementChild.getElementsByClassName('asseticon')[0];
+		let artistbeforeEl = template.content.firstElementChild.getElementsByClassName('artistbeforealbum')[0];
+		let disableactEl = template.content.firstElementChild.getElementsByClassName('disablewhenactivity')[0];
         keyEl.value = this.settings.lastFMKey ?? "";
         nicknameEl.value = this.settings.lastFMNickname ?? "";
         soundcloudEl.value = this.settings.soundcloudKey ?? "";
         dwsEl.value = this.settings.disableWhenSpotify ? "true" : "false";
         listeningEl.value = this.settings.listeningTo ? "true" : "false";
+        artistEl.value = this.settings.artistActivityName ? "true" : "false";
+        lastbtnEl.value = this.settings.lastfmButton ? "true" : "false";
+        ytbtnEl.value = this.settings.youtubeButton ? "true" : "false";
+        assetEl.value = this.settings.assetIcon ? "true" : "false";
+        artistbeforeEl.value = this.settings.artistBeforeAlbum ? "true" : "false";
+        disableactEl.value = this.settings.disableWhenActivity ? "true" : "false";
         let updateKey = () => {
             this.settings.lastFMKey = keyEl.value;
             this.updateSettings();
@@ -334,6 +419,30 @@ Please visit <a href="https://github.com/dimdenGD/LastFMRichPresence" target="_b
             this.settings.listeningTo = listeningEl.value === "true";
             this.updateSettings();
         };
+		artistEl.onchange = () => {
+            this.settings.artistActivityName = artistEl.value === "true";
+            this.updateSettings();
+        };
+		lastbtnEl.onchange = () => {
+            this.settings.lastfmButton = lastbtnEl.value === "true";
+            this.updateSettings();
+        };
+		ytbtnEl.onchange = () => {
+            this.settings.youtubeButton = ytbtnEl.value === "true";
+            this.updateSettings();
+        };
+		assetEl.onchange = () => {
+            this.settings.assetIcon = assetEl.value === "true";
+            this.updateSettings();
+        };
+		artistbeforeEl.onchange = () => {
+            this.settings.artistBeforeAlbum = artistbeforeEl.value === "true";
+            this.updateSettings();
+        };
+		disableactEl.onchange = () => {
+            this.settings.disableWhenActivity = disableactEl.value === "true";
+            this.updateSettings();
+        };
 
         return template.content.firstElementChild;
     }
@@ -352,21 +461,12 @@ Please visit <a href="https://github.com/dimdenGD/LastFMRichPresence" target="_b
         if (this.paused || !this.trackData?.name) {
             return;
         }
-        if(this.settings.disableWhenSpotify) {
-            const activities = this.getLocalPresence().activities;
-            if(activities.find(a => a.name === "Spotify")) {
-                if(activities.find(a => a.name === `${this.trackData?.artist?.['#text']} - ${this.trackData.name}`)) {
-                    this.setActivity({});
-                }
-                return;
-            }
-        }
         let button_urls = [], buttons = [];
-        if(this.trackData.url && isURL(this.trackData.url)) {
+        if(this.settings.lastfmButton && this.trackData.url && isURL(this.trackData.url)) {
             buttons.push("Open Last.fm");
             button_urls.push(this.trackData.url);
         }
-        if(this.trackData.youtubeUrl && isURL(this.trackData.youtubeUrl)) {
+        if(this.settings.youtubeButton && this.trackData.youtubeUrl && isURL(this.trackData.youtubeUrl)) {
             buttons.push("Listen on YouTube");
             button_urls.push(this.trackData.youtubeUrl);
         }
@@ -376,14 +476,14 @@ Please visit <a href="https://github.com/dimdenGD/LastFMRichPresence" target="_b
         }
         let obj = {
             application_id: ClientID,
-            name: `${this.trackData?.artist?.['#text']} - ${this.trackData.name}`,
-            details: this.trackData.name,
-            state: this.trackData?.album?.['#text'] ? `${this.trackData?.artist?.['#text']} - ${this.trackData?.album?.['#text']}` : this.trackData?.artist?.['#text'],
+            name: (this.settings.artistActivityName && `${this.trackData?.artist?.['#text']} - ${this.trackData.name}`) ? this.trackData.artist['#text'] : `${this.trackData.artist?.['#text']} - ${this.trackData.name}`,
+            details: `on ${this.trackData?.album['#text']}`,
+            state: `by ${this.trackData?.artist['#text']}`,
             timestamps: { start: this.startPlaying ? Math.floor(this.startPlaying / 1000) : Math.floor(Date.now() / 1000) },
-            assets: {
+            assets: this.settings.assetIcon ? {
                 small_image: this.trackData.youtubeUrl ? await this.getAsset("youtube") : this.trackData.soundcloudUrl ? await this.getAsset("soundcloud") : await this.getAsset("lastfm"),
                 small_text: this.trackData.youtubeUrl ? "YouTube" : this.trackData.soundcloudUrl ? "SoundCloud" : "Last.fm",
-            },
+            } : {},
             metadata: { button_urls }, buttons
         }
         if(!obj.state) obj.state = "Unknown";
@@ -391,7 +491,7 @@ Please visit <a href="https://github.com/dimdenGD/LastFMRichPresence" target="_b
         
         if(this.trackData?.image?.[1]?.['#text']) {
             obj.assets.large_image = await this.getAsset(this.trackData?.image?.[1]?.['#text']);
-            obj.assets.large_text = this.trackData.name;
+            //obj.assets.large_text = this.trackData.name; // this just repeats the song title underneath artist - album
         }
 
         this.setActivity(obj);
@@ -408,3 +508,4 @@ Please visit <a href="https://github.com/dimdenGD/LastFMRichPresence" target="_b
 }
 
 module.exports = LastFMRichPresence;
+
