@@ -1,5 +1,5 @@
 /**
- * @name LastFMRichPresence
+ * @name BD LastFM-RPC
  * @version 1.0.7
  * @description Last.fm rich presence to show what you're listening to. Finally not just Spotify! 
  * @website https://discord.gg/TBAM6T7AYc
@@ -126,7 +126,7 @@ class LastFMRichPresence {
         };
     }
     getName() {
-        return "LastFMRichPresence";
+        return "BD LastFM-RPC";
     }
     getDescription() {
         return "Last.fm presence to show what you're listening to. Finally not just Spotify! - Tweaked by Riddim Glitch.";
