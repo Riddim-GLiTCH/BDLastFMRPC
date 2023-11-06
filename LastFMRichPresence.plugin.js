@@ -1,7 +1,7 @@
 /**
  * @name LastFMRichPresence
  * @version 1.0.7
- * @description Last.fm rich presence to show what you're listening to. Finally not just Spotify! - Tweaked by Riddim Glitch.
+ * @description Last.fm rich presence to show what you're listening to. Finally not just Spotify! 
  * @website https://discord.gg/TBAM6T7AYc
  * @author dimden#9999 (dimden.dev), dzshn#1312 (dzshn.xyz), Riddim_GLiTCH (riddim-glitch.github.io)
  * @authorLink https://dimden.dev/
@@ -129,13 +129,13 @@ class LastFMRichPresence {
         return "LastFMRichPresence";
     }
     getDescription() {
-        return "Last.fm presence to show what you're listening to. Finally not just Spotify!";
+        return "Last.fm presence to show what you're listening to. Finally not just Spotify! - Tweaked by Riddim Glitch.";
     }
     getVersion() {
         return "1.0.7";
     }
     getAuthor() {
-        return "dimden#9999 (dimden.dev), dzshn#1312 (dzshn.xyz)";
+        return "dimden#9999 (dimden.dev), dzshn#1312 (dzshn.xyz), Riddim_GLiTCH (riddim-glitch.github.io)";
     }
     async start() {
         this.initialize();
