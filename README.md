@@ -7,10 +7,11 @@ Keep in mind that you can't click your own rich presence buttons. Other people c
 ### NOTE: 
 This is a fork of [dimdenGD's LastFM Rich Precence Plugin](https://github.com/dimdenGD/LastFMRichPresence), It changes the code slightly so that it displays the song artist and title in your status line, as seen here.
 
+![Screenshot](https://Riddim-GLiTCH.hacked-your.tech/content/cdn/kvffnjHlVvts.png)
 
-![Screenshot](https://i.imgur.com/tQaSy7x.png)
+Additionally, It can display the Album in the profile popout, as can be seen here.
 
-![Screenshot 2](https://i.imgur.com/VTrQyqH.png)
+![Screenshot 2](https://Riddim-GLiTCH.hacked-your.tech/content/cdn/yKznKEIfVpds.gif)
 
 ## Features
 * Show what music you're listening with Last.fm. With [Webscrobbler](https://chrome.google.com/webstore/detail/web-scrobbler/hhinaapppaileiechjoiifaancjggfjm?hl=en) you can show music from 280+ different websites (see list [here](https://web-scrobbler.com/)).  
